@@ -68,6 +68,10 @@ async def delete_cliente(cliente_id: str):
         await cliente_service.delete_cliente(cliente_id)
         print(f"Method delete_cliente finished successfully")
     except BadRequestException as e:
+        print(f"[ERROR] BadRequestException in delete_cliente: {e.message}")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.message)
     except Exception as e:
+        print(f"[ERROR] Exception in delete_cliente: {type(e).__name__} - {str(e)}")
+        import traceback
+        print(f"[ERROR] Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

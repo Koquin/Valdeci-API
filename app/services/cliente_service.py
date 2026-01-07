@@ -119,14 +119,7 @@ class ClienteService:
         if not existing_cliente:
             raise BadRequestException("Cliente not found")
         
-        # Verifica se o cliente tem dívidas pendentes
-        dividas = await self.divida_repository.search_by_cliente(cliente_id)
-        dividas_pendentes = [d for d in dividas if d["valor_total"] > d["valor_pago"]]
-        
-        if dividas_pendentes:
-            raise BadRequestException("Cannot delete cliente with pending debts")
-        
-        # Deleta o cliente
+        # Deleta o cliente (permitindo deletar mesmo com dívidas)
         deleted = await self.repository.delete(cliente_id)
         if not deleted:
             raise BadRequestException("Failed to delete cliente")
